@@ -86,11 +86,11 @@ class opWikifyDecorator
         $attributes = array_merge($attributes, $urlInfo['attributes']);
       }
 
-      $url = sprintf($urlInfo['url'], $pageName);
+      $url = str_replace('%s', $pageName, $urlInfo['url']);
     }
     else
     {
-      $url = sprintf(self::$wikiUrl[$wikiName], $pageName);
+      $url = str_replace('%s', $pageName, self::$wikiUrl[$wikiName]);
     }
 
     $attributes['href'] = $url;
