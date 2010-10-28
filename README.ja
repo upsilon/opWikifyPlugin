@@ -1,0 +1,57 @@
+opWikifyPlugin
+==============
+
+使い方
+------
+
+このプラグインをインストールした状態で、日記等に
+
+  [[foo]]
+
+と記述すると http://example.com/wiki/foo へのリンクに変換されます。
+また、
+
+  [[wp:メインページ]]
+
+と記述すると Wikipedia のメインページへのリンクになります。
+リンクの文字列を変えたい場合は、
+
+  [[wp:メインページ|ウィキペディア]]
+
+と、パイプ "|" で区切ってリンク名を記述すれば、「ウィキペディア」という
+文字列に Wikipedia へのリンクが設定されます。
+
+
+リンク先の設定
+--------------
+
+リンク先 URL の設定は plugins/opWikifyPlugin/config/interwiki.yml
+に記述されており、追加・削除が可能です。
+
+例えば、GitHub にリンクできるように設定を追加する場合は、
+
+  github: 'http://github.com/%s'
+
+の一行を interwiki.yml に追加すれば、
+
+  [[github:openpne]]
+
+という記述が http://github.com/openpne へのリンクに変換されるようになります。
+
+
+SNS 内へのリンク
+----------------
+
+interwiki.yml には SNS 内のページへリンクするための設定も記述されています。
+例えば日記に、
+
+  [[member:1]]
+
+と記述すると、メンバーIDが 1 のプロフィールへのリンクに変換されます。
+opDiaryPlugin や opCommunityTopicPlugin がインストールされていれば、
+
+  [[diary:1]]
+  [[topic:1]]
+
+のような記述も可能です。
+
