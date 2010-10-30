@@ -25,6 +25,8 @@ class opWikifyDecorator
 
   static public function listenToPostDecorateString(sfEvent $event, $value)
   {
+    sfContext::getInstance()->getConfiguration()->loadHelpers('Tag');
+
     return preg_replace_callback('/\[\[([^\]\|]+)(?:\|([^\]]+))?\]\]/', array(__CLASS__, 'replaceWikiLink'), $value);
   }
 
@@ -33,30 +35,66 @@ class opWikifyDecorator
     $pageName = $match[1];
     $linkText = count($match) == 3 ? $match[2] : $match[1];
 
-    return sprintf('<a class="wikilink" href="%s">%s</a>', self::genWikiUrl($pageName), $linkText);
-  }
-
-  static protected function genWikiUrl($pageName)
-  {
     if (self::$wikiUrl === null)
     {
       self::loadWikiUrl();
     }
 
-    $wikiName = 'default';
+    $wikiName     = 'default';
 
-    if (preg_match('/^([^:]+):(.+)$/', $pageName, $match))
+    if (preg_match('/^([^:]+):(.+)$/', $pageName, $pageNameMatch))
     {
-      if (isset(self::$wikiUrl[$match[1]]))
+      if (isset(self::$wikiUrl[$pageNameMatch[1]]))
       {
-        $wikiName = $match[1];
-        $pageName = $match[2];
+        $wikiName     = $pageNameMatch[1];
+        $pageName = $pageNameMatch[2];
       }
     }
 
     $pageName = urlencode($pageName);
 
-    return sprintf(self::$wikiUrl[$wikiName], $pageName);
+    if (!isset(self::$wikiUrl[$wikiName]))
+    {
+      return $match[0];
+    }
+
+    $attributes = array('class' => 'wikilink');
+
+    if (is_array(self::$wikiUrl[$wikiName]))
+    {
+      $urlInfo = self::$wikiUrl[$wikiName];
+
+      if (isset(self::$wikiUrl['url']))
+      {
+        return $match[0];
+      }
+
+      if ('mobile_frontend' === sfConfig::get('sf_app'))
+      {
+        if (isset($urlInfo['enable_mobile']) && !$urlInfo['enable_mobile'])
+        {
+          return $match[0];
+        }
+      }
+      elseif (isset($urlInfo['enable_pc']) && !$urlInfo['enable_pc'])
+      {
+        return $match[0];
+      }
+
+      if (isset($urlInfo['attributes']) && is_array($urlInfo['attributes']))
+      {
+        $attributes = array_merge($attributes, $urlInfo['attributes']);
+      }
+
+      $url = sprintf($urlInfo['url'], $pageName);
+    }
+    else
+    {
+      $url = sprintf(self::$wikiUrl[$wikiName], $pageName);
+    }
+
+    $attributes['href'] = $url;
+    return content_tag('a', $linkText, $attributes);
   }
 
   static protected function loadWikiUrl()
