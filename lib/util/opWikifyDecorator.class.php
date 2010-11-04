@@ -35,14 +35,48 @@ class opWikifyDecorator
     $pageName = $match[1];
     $linkText = count($match) == 3 ? $match[2] : $match[1];
 
+    $wikiLink = self::parseWikiLink($pageName);
+
+    if (!isset($wikiLink['url']))
+    {
+      return $match[0];
+    }
+
+    $attributes = array('class' => 'wikilink');
+
+    if ('mobile_frontend' === sfConfig::get('sf_app'))
+    {
+      if (isset($wikiLink['enable_mobile']) && !$wikiLink['enable_mobile'])
+      {
+        return $match[0];
+      }
+    }
+    elseif (isset($wikiLink['enable_pc']) && !$wikiLink['enable_pc'])
+    {
+      return $match[0];
+    }
+
+    if (isset($wikiLink['attributes']) && is_array($wikiLink['attributes']))
+    {
+      $attributes = array_merge($attributes, $wikiLink['attributes']);
+    }
+
+    $attributes['href'] = str_replace('%s', urlencode($wikiLink['pageName']), $wikiLink['url']);
+
+    return content_tag('a', $linkText, $attributes);
+  }
+
+  static protected function parseWikiLink($wikiLink)
+  {
     if (self::$wikiUrl === null)
     {
       self::loadWikiUrl();
     }
 
     $wikiName     = 'default';
+    $pageName     = $wikiLink;
 
-    if (preg_match('/^([^:]+):(.+)$/', $pageName, $pageNameMatch))
+    if (preg_match('/^([^:]+):(.+)$/', $wikiLink, $pageNameMatch))
     {
       if (isset(self::$wikiUrl[$pageNameMatch[1]]))
       {
@@ -51,50 +85,26 @@ class opWikifyDecorator
       }
     }
 
-    $pageName = urlencode($pageName);
+    $result = array(
+      'wikiName' => $wikiName,
+      'pageName' => $pageName,
+    );
 
     if (!isset(self::$wikiUrl[$wikiName]))
     {
-      return $match[0];
+      return $result;
     }
-
-    $attributes = array('class' => 'wikilink');
 
     if (is_array(self::$wikiUrl[$wikiName]))
     {
-      $urlInfo = self::$wikiUrl[$wikiName];
-
-      if (isset(self::$wikiUrl['url']))
-      {
-        return $match[0];
-      }
-
-      if ('mobile_frontend' === sfConfig::get('sf_app'))
-      {
-        if (isset($urlInfo['enable_mobile']) && !$urlInfo['enable_mobile'])
-        {
-          return $match[0];
-        }
-      }
-      elseif (isset($urlInfo['enable_pc']) && !$urlInfo['enable_pc'])
-      {
-        return $match[0];
-      }
-
-      if (isset($urlInfo['attributes']) && is_array($urlInfo['attributes']))
-      {
-        $attributes = array_merge($attributes, $urlInfo['attributes']);
-      }
-
-      $url = str_replace('%s', $pageName, $urlInfo['url']);
+      $result = array_merge($result, self::$wikiUrl[$wikiName]);
     }
     else
     {
-      $url = str_replace('%s', $pageName, self::$wikiUrl[$wikiName]);
+      $result['url'] = self::$wikiUrl[$wikiName];
     }
 
-    $attributes['href'] = $url;
-    return content_tag('a', $linkText, $attributes);
+    return $result;
   }
 
   static protected function loadWikiUrl()
