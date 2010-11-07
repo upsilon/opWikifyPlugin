@@ -22,5 +22,6 @@ class opWikifyPluginConfiguration extends sfPluginConfiguration
   public function initialize()
   {
     $this->dispatcher->connect('op_decoration.filter_html', array('opWikifyDecorator', 'listenToPostDecorateString'));
+    $this->dispatcher->connect('op_activity.filter_body', array('opWikifyDecorator', 'listenToPostDecorateString'));
   }
 }
