@@ -30,13 +30,20 @@ commu: <?php echo $base.'/community/%s'."\n"; ?>
 community: <?php echo $base.'/community/%s'."\n"; ?>
 
 ## 以下は別途プラグインが必要
+<?php $plugins = ProjectConfiguration::getActive()->getPlugins() ?>
+
 # opDiaryPlugin
+<?php if (in_array('opDiaryPlugin', $plugins)): ?>
 diary: <?php echo $base.'/diary/%s'."\n"; ?>
+<?php endif ?>
 
 # opAlbumPlugin
+<?php if (in_array('opAlbumPlugin', $plugins)): ?>
 album: <?php echo $base.'/album/%s'."\n"; ?>
+<?php endif ?>
 
 #opCommunityTopicPlugin
+<?php if (in_array('opCommunityTopicPlugin', $plugins)): ?>
 topic: <?php echo $base.'/communityTopic/%s'."\n"; ?>
 event: <?php echo $base.'/communityEvent/%s'."\n"; ?>
-
+<?php endif ?>
