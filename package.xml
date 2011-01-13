@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+ <name>opWikifyPlugin</name>
+ <channel>plugins.openpne.jp</channel>
+ <summary>opWikifyPlugin</summary>
+ <description>日記等で [[foo]] のようなWiki風リンクを使用できるようにするプラグイン
+
+※ アクティビティではこのプラグインを入れるだけでリンク構文が使えますが、日記に使う場合は https://github.com/upsilon/OpenPNE3/commit/ace43b7 の変更を適用する必要があります。</description>
+ <lead>
+  <name>Youichi Kimura</name>
+  <user>upsilon</user>
+  <email />
+  <active>yes</active>
+ </lead>
+ <date>2011-01-13</date>
+ <time>17:42:56</time>
+ <version>
+  <release>1.0</release>
+  <api>1.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license>Apache</license>
+ <notes>
+first release
+ </notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <file baseinstalldir="/" md5sum="0f4723d728aac98d896ba4ad0731cbde" name="config/interwiki.yml" role="data" />
+   <file baseinstalldir="/" md5sum="181d167792ea00be7a2cec2d75fbe0e7" name="config/opWikifyPluginConfiguration.class.php" role="data" />
+   <file baseinstalldir="/" md5sum="d1a021a320697a9dc172f02364c035b7" name="lib/util/opWikifyDecorator.class.php" role="data" />
+   <file baseinstalldir="/" md5sum="2089e76b9d0ae0fd4d222ee37ea68cb5" name="test/bootstrap/functional.php" role="data" />
+   <file baseinstalldir="/" md5sum="4bfa4b596e946c8a283410a2e2ba4315" name="test/bootstrap/unit.php" role="data" />
+   <file baseinstalldir="/" md5sum="d41d8cd98f00b204e9800998ecf8427e" name="test/config/interwiki.yml" role="data" />
+   <file baseinstalldir="/" md5sum="8a98cacfcc151f2808c399543fd52679" name="test/functional/mobile_frontend/skeletonActionsTest.php" role="data" />
+   <file baseinstalldir="/" md5sum="1faa199e87c1ce270e86edee706b37fd" name="test/functional/pc_frontend/skeletonActionsTest.php" role="data" />
+   <file baseinstalldir="/" md5sum="1898be33cbdb57122044832e80c0dd11" name="test/unit/util/opWikifyDecoratorTest.php" role="data" />
+   <file baseinstalldir="/" md5sum="3b83ef96387f14655fc854ddc3c6bd57" name="LICENSE" role="data" />
+   <file baseinstalldir="/" md5sum="851f31c7a8d954b057f20c0b19d87d14" name="README" role="data" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.3</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>1.0</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2011-01-13</date>
+   <license>Apache</license>
+   <notes>
+first release
+   </notes>
+  </release>
+ </changelog>
+</package>
