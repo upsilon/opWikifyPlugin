@@ -61,7 +61,8 @@ class opWikifyDecorator
       $attributes = array_merge($attributes, $wikiLink['attributes']);
     }
 
-    $attributes['href'] = str_replace('%s', urlencode($wikiLink['pageName']), $wikiLink['url']);
+    $pageName = self::encodeWikiUrl($wikiLink['pageName']);
+    $attributes['href'] = str_replace('%s', $pageName, $wikiLink['url']);
 
     return content_tag('a', $linkText, $attributes);
   }
@@ -105,6 +106,26 @@ class opWikifyDecorator
     }
 
     return $result;
+  }
+
+  static protected function encodeWikiUrl($url)
+  {
+    $anchorPos = mb_strpos($url, '#');
+    if (false !== $anchorPos)
+    {
+      $anchor = mb_substr($url, $anchorPos + 1);
+      $url = mb_substr($url, 0, $anchorPos);
+    }
+
+    $url = str_replace('%2F', '/', urlencode($url));
+
+    if (isset($anchor))
+    {
+      $anchor = str_replace('%', '.', urlencode($anchor));
+      $url .= '#'.$anchor;
+    }
+
+    return $url;
   }
 
   static protected function loadWikiUrl()
