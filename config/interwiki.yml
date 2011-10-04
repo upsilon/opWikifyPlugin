@@ -47,3 +47,9 @@ album: "<?php echo $base.'/album/%s' ?>"
 topic: "<?php echo $base.'/communityTopic/%s' ?>"
 event: "<?php echo $base.'/communityEvent/%s' ?>"
 <?php endif ?>
+
+# opCalendarPlugin
+<?php if (in_array('opCalendarPlugin', $plugins)): ?>
+schedule: "<?php echo $base.'/schedule/%s' ?>"
+calendar: "<?php echo $base.'/calendar/%s' ?>"
+<?php endif ?>
